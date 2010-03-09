@@ -7,7 +7,7 @@ begin
     gemspec.email = "adam@dberg.org"
     gemspec.homepage = "http://github.com/denen99/jruby-gate"
     gemspec.authors = ["Adam Denenberg"]
-    gemspec.files = ["README","Rakefile","jruby-gate.gem","lib/jruby-gate.rb"]
+    gemspec.files = ["README","Rakefile","jruby-gate.gem","lib/jruby-gate.rb"] + Dir["lib/jruby-gate/*"]
   end
   Jeweler::GemcutterTasks.new
 rescue LoadError
