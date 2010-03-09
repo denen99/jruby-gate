@@ -1,6 +1,6 @@
 class JrubyGate
 
-  module Configuration
+  class Configuration
 
     ## Load up the necessary jars
     def initialize
