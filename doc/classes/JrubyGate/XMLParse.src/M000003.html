@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse_annotation (JrubyGate::XMLParse)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/jruby-gate/xmlparse.rb, line 15</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_annotation</span>(<span class="ruby-identifier">str</span>)
+     <span class="ruby-identifier">doc</span> =  <span class="ruby-constant">Hpricot</span>(<span class="ruby-identifier">str</span>) 
+     <span class="ruby-identifier">children</span> = <span class="ruby-identifier">doc</span>.<span class="ruby-identifier">at</span>(<span class="ruby-value str">&quot;textwithnodes&quot;</span>).<span class="ruby-identifier">children</span>
+
+     <span class="ruby-comment cmt">## Find the TextWithNodes element and then loop through</span>
+     <span class="ruby-comment cmt">## each child element.  The text next to each node gets associated</span>
+     <span class="ruby-comment cmt">## with the node id into the hash</span>
+     (<span class="ruby-value">0</span><span class="ruby-operator">..</span><span class="ruby-identifier">doc</span>.<span class="ruby-identifier">at</span>(<span class="ruby-value str">&quot;textwithnodes&quot;</span>).<span class="ruby-identifier">children</span>.<span class="ruby-identifier">size</span>).<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">i</span><span class="ruby-operator">|</span> 
+       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">children</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">class</span>.<span class="ruby-identifier">to_s</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'Hpricot::Elem'</span> 
+        <span class="ruby-ivar">@nodehash</span>[<span class="ruby-identifier">children</span>[<span class="ruby-identifier">i</span>].<span class="ruby-identifier">attributes</span>[<span class="ruby-value str">&quot;id&quot;</span>]] = <span class="ruby-identifier">children</span>[<span class="ruby-identifier">i</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">''</span>
+        <span class="ruby-identifier">i</span> <span class="ruby-operator">+=</span> <span class="ruby-value">2</span> 
+       <span class="ruby-keyword kw">end</span>
+      }
+     <span class="ruby-ivar">@nodehash</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
