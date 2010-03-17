@@ -1,4 +1,3 @@
-class JrubyGate
 
   module XMLParse
 
@@ -29,9 +28,6 @@ class JrubyGate
     end
 
   end
-
-
-end
 
 
 
