@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{jruby-gate}
-  s.version = "0.2.0"
+  s.version = "0.3.0"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Adam Denenberg"]
-  s.date = %q{2010-03-08}
+  s.date = %q{2010-03-09}
   s.description = %q{Jruby library for accessing the Gate framwork}
   s.email = %q{adam@dberg.org}
   s.extra_rdoc_files = [
