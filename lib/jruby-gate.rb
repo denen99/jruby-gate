@@ -22,12 +22,7 @@ require 'jruby-gate/config'
 require 'jruby-gate/xmlparse'
 require 'jruby-gate/log'
 require 'jruby-gate/javaio'
-
- module JRGate
-  include_package "gate"
-  include_package "gate.creole"
-  include_package "gate.util"
- end
+require 'jruby-gate/jrgate'
 
 
 class JrubyGate
@@ -40,7 +35,8 @@ class JrubyGate
  include XMLParse
 
 
-   attr_accessor :debug, :pluginsHome, :corpus, :resources, :controller
+   attr_accessor :debug, :pluginsHome, :corpus, :resources
+   attr_accessor :controller, :controllerObject, :corpusObject, :corpus
 
    def Gate
      JRGate::Gate
@@ -49,19 +45,22 @@ class JrubyGate
    def Factory
      JRGate::Factory
    end
+  
+   def GateException
+     JRGate::GateException
+   end
 
    def initialize(*params)
      @debug = true
      @resources = Array.new
+     @@logger = Logger.
      log_msg("About to initialize Gate") 
      startup_gate
+     @entity_types =  ["Person", "Location","Organization", "Date",\
+         "Money", "Temperature", "Length", "Area",\
+         "Volume", "Weight", "Speed", "urlAddress"]
      log_msg("Initialize complete")
    end
-
-   #def controller
-     #JrubyGate::GateController.controller
-   #  @controller.controller
-   #end
 
    
    def startup_gate
@@ -80,28 +79,47 @@ class JrubyGate
    end
 
    def create_corpus
-     self.corpus = JrubyGate::GateCorpus.new
+     log_msg("Creating new corpus")
+     @corpusObject = JrubyGate::GateCorpus.new
+     self.corpus = @corpusObject.corpus
+     log_msg("Corpus creation complete")
+     @corpusObject
+   end
+
+   def entity_types
+     self.entity_types
+   end
+
+   def entity_types=(e)
+     raise("Entity types parameter must be an array!") unless e.is_a?(Array)
+     self.entity_types = e
    end
 
    def create_controller(controller_name="JrubyGateController")
-     self.controller = JrubyGate::GateController.new(controller_name)
+     log_msg("Creating new controller --> " + controller_name)
+     @controllerObject = JrubyGate::GateController.new(controller_name)
+     self.controller = @controllerObject.controller
+     log_msg("Controller creation complete")
+     @controllerObject
    end
 
    def add_resource(name)
+     log_msg("Adding new resource " + name )
      ### NEED TO SUPPORT FEATUREMAP OPTIONS !!
-     self.controller.add(self.Factory.createResource(name,self.Factory.newFeatureMap))
+     @controller.add(self.Factory.createResource(name,self.Factory.newFeatureMap))
      @resources.push(name)
+     log_msg("Resource addition complete")
    end
 
+   def get_annotations
+     @corpus.document.getAnnotations.get.each { |ann|
 
-   def add_document(d)
-     @document = Factory.newDocument(d)
-     @corpus.add(@document)
+     }
    end
 
    def execute
      raise("You can not execute without setting a corpus first or adding at least 1 document !!") unless @corpus || @corpus.isEmpty
-     @controller.setCorpus(@corpus)
+     #@controller.setCorpus(@corpus)
      @controller.execute
    end
 

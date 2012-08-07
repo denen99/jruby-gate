@@ -2,7 +2,7 @@ class JrubyGate
 
   class GateController < JrubyGate
 
-    attr_accessor :controller
+    #attr_accessor :controller
 
    def initialize(name)
      @controller = self.Factory.createResource("gate.creole.SerialAnalyserController",\
@@ -20,9 +20,18 @@ class JrubyGate
      @controller.setCorpus(c)
    end
 
-   def execute
-     @controller.execute
+   def clear_corpus(c)
+     log_msg("Clearing out the corpus")
+     c.clear
    end
+
+   def execute
+    begin
+     @controller.execute
+    rescue => e 
+    end
+   end
+   
    
   end
 

@@ -8,20 +8,24 @@ class JrubyGate
       @corpus = self.Factory.createResource("gate.corpora.CorpusImpl")
     end
 
-    def add_document_file(f)
+    def add_document(input,controller,type='file')
       raise("Can not add document until you create a corpus!") unless @corpus
-      f = File.open(f)
-      @content = f.read
-      f.close
-      @document = self.Factory.newDocument(@content)
-      @corpus.add(@document)
+      
+      if type == 'file' 
+       f = File.open(input)
+       @content = f.read
+       f.close
+       @document = self.Factory.newDocument(@content)
+       @corpus.add(@document)
+       controller.set_corpus(@corpus)
+      else
+       @content = input
+       @document = self.Factory.newDocument(input)
+       @corpus.add(@document)
+       controller.set_corpus(@corpus)
+      end
     end
 
-    def add_document_string(s)
-      @content = s
-      @document = self.Factory.newDocument(s)
-      @corpus.add(@document)
-    end
 
   end
 
